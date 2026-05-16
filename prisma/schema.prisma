@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum RagStatus {
+  GREEN
+  RED
+}
+
+enum BookingStatus {
+  DEPOSIT_RECEIVED
+  FULL_AMOUNT_PAID
+  EVENT_CANCELLED
+  NO_PAYMENT_REQUIRED
+}
+
+enum ObUnit {
+  OB_WAGON
+  SECOND_UNIT
+}
+
+enum CancelReason {
+  DOUBLE_ENTRY
+  EVENT_CANCELLED
+}
+
+model Season {
+  id           Int           @id @default(autoincrement())
+  name         String
+  startDate    DateTime
+  endDate      DateTime
+  isActive     Boolean       @default(false)
+  bankHolidays BankHoliday[]
+  bookings     Booking[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model BankHoliday {
+  id       Int      @id @default(autoincrement())
+  seasonId Int
+  season   Season   @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  label    String
+  date     DateTime
+}
+
+model Member {
+  id           Int             @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  email        String?
+  phone        String?
+  isTeamLeader Boolean         @default(false)
+  isActive     Boolean         @default(true)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  ledBookings  Booking[]       @relation("TeamLeader")
+  helperSlots  BookingHelper[]
+}
+
+model Contact {
+  id        Int       @id @default(autoincrement())
+  name      String
+  tel       String?
+  mobile    String?
+  email     String?
+  address   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  bookings  Booking[]
+}
+
+model Booking {
+  id               Int            @id @default(autoincrement())
+  bookingRef       String         @unique
+  seasonId         Int
+  season           Season         @relation(fields: [seasonId], references: [id])
+  date             DateTime
+  setupTime        String
+  eventTimeStart   String
+  eventTimeEnd     String
+  eventName        String
+  venue            String?
+  location         String?
+  ragStatus        RagStatus      @default(RED)
+  bookingStatus    BookingStatus?
+  obUnit           ObUnit         @default(OB_WAGON)
+  doubleBooking    Boolean        @default(false)
+  generatorRequired Boolean       @default(false)
+  requiredTeamSize Int            @default(3)
+  teamLeaderId     Int?
+  teamLeader       Member?        @relation("TeamLeader", fields: [teamLeaderId], references: [id])
+  helpers          BookingHelper[]
+  contactId        Int?
+  contact          Contact?       @relation(fields: [contactId], references: [id])
+  fee              Float          @default(0)
+  generatorFee     Float          @default(0)
+  total            Float          @default(0)
+  deposit          Float          @default(0)
+  balance          Float          @default(0)
+  invoiceAddress   String?
+  comments         String?
+  cancelledAt      DateTime?
+  cancelReason     CancelReason?
+  cancelNote       String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model BookingHelper {
+  id        Int     @id @default(autoincrement())
+  bookingId Int
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  memberId  Int
+  member    Member  @relation(fields: [memberId], references: [id])
+
+  @@unique([bookingId, memberId])
+}
+
+model AppSettings {
+  id             Int   @id @default(autoincrement())
+  generatorFee   Float @default(20)
+  defaultTeamSize Int  @default(3)
+}
+
+model Metadata {
+  key   String @id
+  value String
+}

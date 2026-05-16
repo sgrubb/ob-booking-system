@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="180" fill="#1e3a5f"/>
+
+  <!-- Radio waves (drawn first, behind mast visually matches order) -->
+  <path d="M 452,408 Q 512,338 572,408"
+        fill="none" stroke="#f8c832" stroke-width="22" stroke-linecap="round"/>
+  <path d="M 382,426 Q 512,288 642,426"
+        fill="none" stroke="#f8c832" stroke-width="19" stroke-linecap="round" opacity="0.70"/>
+  <path d="M 312,444 Q 512,238 712,444"
+        fill="none" stroke="#f8c832" stroke-width="16" stroke-linecap="round" opacity="0.42"/>
+
+  <!-- Antenna mast -->
+  <rect x="507" y="390" width="10" height="86" rx="3" fill="#f8c832"/>
+
+  <!-- Wheels (drawn before body so body overlaps them slightly) -->
+  <circle cx="288" cy="765" r="62" fill="#0f2133"/>
+  <circle cx="288" cy="765" r="38" fill="#7a9eb8"/>
+  <circle cx="288" cy="765" r="14" fill="#0f2133"/>
+  <circle cx="660" cy="765" r="62" fill="#0f2133"/>
+  <circle cx="660" cy="765" r="38" fill="#7a9eb8"/>
+  <circle cx="660" cy="765" r="14" fill="#0f2133"/>
+
+  <!-- Van main body -->
+  <rect x="100" y="568" width="720" height="188" rx="20" fill="white"/>
+  <!-- Van cab (raised front section) -->
+  <rect x="678" y="476" width="142" height="92" rx="14" fill="white"/>
+  <!-- Windscreen -->
+  <rect x="686" y="484" width="127" height="76" rx="8" fill="#6fa8c8"/>
+
+  <!-- Red cross on body -->
+  <rect x="367" y="596" width="46" height="140" rx="9" fill="#e03030"/>
+  <rect x="293" y="644" width="194" height="44" rx="9" fill="#e03030"/>
+</svg>
